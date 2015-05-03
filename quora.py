@@ -1,7 +1,6 @@
 import sys
 import numpy as np
-from sklearn.svm import SVC
-from sklearn.grid_search import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
 from sklearn import preprocessing
 
 lines = sys.stdin.readlines()
@@ -24,14 +23,9 @@ for i in xrange(1,N):
 	training_X.append(X)
 
 training_X = preprocessing.scale(training_X)
-params = {'C':[0.1,1,10],'kernel':['linear','rbf'],'gamma':[0,0.1,0.2,0.3]}
-#grid_search = GridSearchCV(SVC(max_iter=25000),param_grid=params,cv=3)
 
-model=SVC(max_iter=1500,C=0.5,gamma=0.1)
+model=RandomForestClassifier(n_estimators=20)
 model.fit(training_X,training_Y)
-#print "Fitting the model"
-#grid_search.fit(training_X,training_Y)
-#print "Model has been fit"
 
 q = int(lines[N+1].strip())
 test_X = []
@@ -47,7 +41,6 @@ for i in xrange(q):
 		X[int(data[0])-1] = float(data[1])
 	test_X.append(X)
 
-#model = grid_search.best_estimator_
 test_Y = model.predict(preprocessing.scale(test_X))
 
 for i in xrange(q):
